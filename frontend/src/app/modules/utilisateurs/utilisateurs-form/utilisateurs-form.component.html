@@ -1,0 +1,81 @@
+<div class="page-header">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/utilisateurs">Utilisateurs</a></li>
+      <li class="breadcrumb-item active">{{ isEditMode ? 'Modifier' : 'Nouvel utilisateur' }}</li>
+    </ol>
+  </nav>
+  <h2 class="mb-0">
+    <i class="bi bi-person-gear me-2 text-primary"></i>
+    {{ isEditMode ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur' }}
+  </h2>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="!loading" class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body p-4">
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label class="form-label">Nom complet <span class="text-danger">*</span></label>
+            <input type="text" class="form-control"
+                   [class.is-invalid]="f['nom'].invalid && f['nom'].touched"
+                   formControlName="nom" placeholder="Jean Dupont">
+            <div class="invalid-feedback">Le nom doit contenir au moins 2 caractères.</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Adresse email <span class="text-danger">*</span></label>
+            <input type="email" class="form-control"
+                   [class.is-invalid]="f['email'].invalid && f['email'].touched"
+                   formControlName="email" placeholder="jean@exemple.com">
+            <div class="invalid-feedback">Email invalide.</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">
+              Mot de passe <span *ngIf="!isEditMode" class="text-danger">*</span>
+              <span *ngIf="isEditMode" class="text-muted small">(laisser vide pour conserver)</span>
+            </label>
+            <input type="password" class="form-control"
+                   [class.is-invalid]="f['motDePasse'].invalid && f['motDePasse'].touched"
+                   formControlName="motDePasse" placeholder="••••••••">
+            <div class="invalid-feedback">Minimum 6 caractères.</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Rôle</label>
+            <select class="form-select" formControlName="roleId">
+              <option [value]="null">— Aucun rôle —</option>
+              <option *ngFor="let role of roles" [value]="role.id">{{ role.nom }}</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" formControlName="actif" id="actifSwitch">
+              <label class="form-check-label" for="actifSwitch">Compte actif</label>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="saving">
+              <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!saving" class="bi bi-check-lg me-2"></i>
+              {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+            </button>
+            <a routerLink="/utilisateurs" class="btn btn-light">
+              <i class="bi bi-arrow-left me-2"></i>Annuler
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

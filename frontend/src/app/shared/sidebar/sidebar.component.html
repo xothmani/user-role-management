@@ -1,0 +1,59 @@
+<aside class="sidebar d-flex flex-column"
+       style="width: var(--sidebar-width); background: var(--sidebar-bg); position: fixed;
+              top: 0; left: 0; height: 100vh; z-index: 1001; padding-top: 20px;">
+
+  <div class="px-4 pb-4 border-bottom border-secondary">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-people-fill text-primary fs-4"></i>
+      <div>
+        <div class="text-white fw-bold" style="font-size: 0.9rem;">User Manager</div>
+        <div style="color: var(--sidebar-text); font-size: 0.75rem;">v1.0.0</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="flex-grow-1 py-3">
+    <div class="px-3 mb-2">
+      <small style="color: var(--sidebar-text); font-size: 0.7rem; text-transform: uppercase;
+                    letter-spacing: 0.1em;">Menu principal</small>
+    </div>
+
+    <ul class="nav flex-column gap-1 px-2">
+      <li class="nav-item">
+        <a routerLink="/utilisateurs" routerLinkActive="active"
+           class="nav-link d-flex align-items-center gap-2 rounded px-3 py-2"
+           style="color: var(--sidebar-text);">
+          <i class="bi bi-people fs-5"></i>
+          <span>Utilisateurs</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/roles" routerLinkActive="active"
+           class="nav-link d-flex align-items-center gap-2 rounded px-3 py-2"
+           style="color: var(--sidebar-text);">
+          <i class="bi bi-shield-lock fs-5"></i>
+          <span>Rôles</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/historique" routerLinkActive="active"
+           class="nav-link d-flex align-items-center gap-2 rounded px-3 py-2"
+           style="color: var(--sidebar-text);">
+          <i class="bi bi-clock-history fs-5"></i>
+          <span>Historique</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<style>
+  .nav-link:hover {
+    background: var(--sidebar-hover) !important;
+    color: white !important;
+  }
+  .nav-link.active {
+    background: var(--sidebar-active) !important;
+    color: white !important;
+  }
+</style>

@@ -1,0 +1,87 @@
+<div class="page-header d-flex justify-content-between align-items-center">
+  <div>
+    <h2 class="mb-1"><i class="bi bi-shield-lock me-2 text-primary"></i>Rôles</h2>
+    <p class="text-muted mb-0 small">Gestion des rôles et permissions</p>
+  </div>
+  <a routerLink="/roles/nouveau" class="btn btn-primary">
+    <i class="bi bi-plus-circle me-2"></i>Nouveau rôle
+  </a>
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+  {{ error }}
+  <button type="button" class="btn-close" (click)="error = ''"></button>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">Liste des rôles</span>
+    <span class="badge bg-primary rounded-pill">{{ roles.length }}</span>
+  </div>
+  <div class="card-body p-0">
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div *ngIf="!loading && roles.length === 0" class="text-center py-5">
+      <i class="bi bi-shield text-muted" style="font-size: 2.5rem;"></i>
+      <p class="text-muted mt-2">Aucun rôle trouvé</p>
+      <a routerLink="/roles/nouveau" class="btn btn-primary btn-sm">Créer un rôle</a>
+    </div>
+
+    <div *ngIf="!loading && roles.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Permissions</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let role of roles">
+            <td class="text-muted small">{{ role.id }}</td>
+            <td>
+              <span class="fw-semibold">
+                <i class="bi bi-shield-check text-primary me-1"></i>{{ role.nom }}
+              </span>
+            </td>
+            <td class="text-muted">{{ role.description || '—' }}</td>
+            <td>
+              <div class="d-flex flex-wrap gap-1">
+                <span *ngFor="let perm of role.permissions"
+                      class="badge bg-secondary-subtle text-secondary rounded-pill">
+                  {{ perm.nom }}
+                </span>
+                <span *ngIf="!role.permissions || role.permissions.length === 0"
+                      class="text-muted small">—</span>
+              </div>
+            </td>
+            <td class="text-end">
+              <div class="d-flex gap-1 justify-content-end">
+                <a [routerLink]="['/roles', role.id, 'modifier']"
+                   class="btn btn-sm btn-outline-primary btn-action">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <button class="btn btn-sm btn-outline-danger btn-action" (click)="confirmDelete(role.id!)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-confirm-dialog
+  [visible]="showConfirm"
+  title="Supprimer le rôle"
+  message="Cette action est irréversible. Voulez-vous vraiment supprimer ce rôle ?"
+  confirmText="Supprimer"
+  (confirmed)="onDeleteConfirmed()"
+  (cancelled)="onDeleteCancelled()"
+/>

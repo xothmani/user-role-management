@@ -1,0 +1,97 @@
+<div class="page-header d-flex justify-content-between align-items-center">
+  <div>
+    <h2 class="mb-1"><i class="bi bi-people me-2 text-primary"></i>Utilisateurs</h2>
+    <p class="text-muted mb-0 small">Gestion des comptes utilisateurs</p>
+  </div>
+  <a routerLink="/utilisateurs/nouveau" class="btn btn-primary">
+    <i class="bi bi-person-plus me-2"></i>Nouvel utilisateur
+  </a>
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+  {{ error }}
+  <button type="button" class="btn-close" (click)="error = ''"></button>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">Liste des utilisateurs</span>
+    <span class="badge bg-primary rounded-pill">{{ utilisateurs.length }}</span>
+  </div>
+  <div class="card-body p-0">
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+      <p class="text-muted mt-2">Chargement...</p>
+    </div>
+
+    <div *ngIf="!loading && utilisateurs.length === 0" class="text-center py-5">
+      <i class="bi bi-inbox text-muted" style="font-size: 2.5rem;"></i>
+      <p class="text-muted mt-2">Aucun utilisateur trouvé</p>
+      <a routerLink="/utilisateurs/nouveau" class="btn btn-primary btn-sm">
+        Créer le premier utilisateur
+      </a>
+    </div>
+
+    <div *ngIf="!loading && utilisateurs.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of utilisateurs">
+            <td class="text-muted small">{{ u.id }}</td>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar-circle bg-primary text-white rounded-circle d-flex align-items-center
+                            justify-content-center" style="width: 36px; height: 36px; font-size: 0.85rem;">
+                  {{ u.nom.charAt(0).toUpperCase() }}
+                </div>
+                <span class="fw-medium">{{ u.nom }}</span>
+              </div>
+            </td>
+            <td class="text-muted">{{ u.email }}</td>
+            <td>
+              <span *ngIf="u.roleNom" class="badge bg-primary-subtle text-primary">
+                {{ u.roleNom }}
+              </span>
+              <span *ngIf="!u.roleNom" class="text-muted small">—</span>
+            </td>
+            <td>
+              <span [class]="'badge ' + (u.actif ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary')">
+                <i [class]="'bi me-1 ' + (u.actif ? 'bi-check-circle' : 'bi-x-circle')"></i>
+                {{ u.actif ? 'Actif' : 'Inactif' }}
+              </span>
+            </td>
+            <td class="text-end">
+              <div class="d-flex gap-1 justify-content-end">
+                <a [routerLink]="['/utilisateurs', u.id, 'modifier']"
+                   class="btn btn-sm btn-outline-primary btn-action">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <button class="btn btn-sm btn-outline-danger btn-action" (click)="confirmDelete(u.id!)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-confirm-dialog
+  [visible]="showConfirm"
+  title="Supprimer l'utilisateur"
+  message="Cette action est irréversible. Voulez-vous vraiment supprimer cet utilisateur ?"
+  confirmText="Supprimer"
+  (confirmed)="onDeleteConfirmed()"
+  (cancelled)="onDeleteCancelled()"
+/>
