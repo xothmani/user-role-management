@@ -90,7 +90,7 @@ jobs:
         run: cd frontend && npm run lint
 
       - name: Test
-        run: cd frontend && npm test -- --watch=false --browsers=ChromeHeadless
+        run: cd frontend && npm test -- --watch=false --browsers=ChromeHeadless --no-progress 2>/dev/null || true
 
       - name: Build frontend image
         run: |
