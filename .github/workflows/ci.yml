@@ -68,6 +68,12 @@ jobs:
       - name: Push backend image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/user-role-management-backend:${{ github.sha }}
 
+      - name: Push backend image as latest
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/user-role-management-backend:${{ github.sha }} \
+                     ${{ secrets.DOCKER_USERNAME }}/user-role-management-backend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/user-role-management-backend:latest
+
   frontend-ci:
     runs-on: ubuntu-latest
     needs: backend-ci
@@ -114,3 +120,9 @@ jobs:
 
       - name: Push frontend image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/user-role-management-frontend:${{ github.sha }}
+
+      - name: Push frontend image as latest
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/user-role-management-frontend:${{ github.sha }} \
+                     ${{ secrets.DOCKER_USERNAME }}/user-role-management-frontend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/user-role-management-frontend:latest
