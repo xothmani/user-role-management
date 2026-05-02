@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Permission } from '../models/permission.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class PermissionService {
-  private readonly API = 'http://localhost:8080/api/permissions';
+  private readonly API = `${environment.apiUrl}/api/permissions`;
 
   constructor(private http: HttpClient) {}
 

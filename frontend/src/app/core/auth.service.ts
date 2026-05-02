@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface JwtResponse {
   token: string;
@@ -12,7 +13,7 @@ export interface JwtResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:8080/api/auth';
+  private readonly API_URL = `${environment.apiUrl}/api/auth`;
   private readonly TOKEN_KEY = 'jwt_token';
   private readonly USER_KEY = 'current_user';
 
