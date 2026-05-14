@@ -1,0 +1,53 @@
+<div class="page-header">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a routerLink="/permissions">Permissions</a></li>
+      <li class="breadcrumb-item active">{{ isEditMode ? 'Modifier' : 'Nouvelle permission' }}</li>
+    </ol>
+  </nav>
+  <h2 class="mb-0">
+    <i class="bi bi-key-fill me-2 text-primary"></i>
+    {{ isEditMode ? 'Modifier la permission' : 'Nouvelle permission' }}
+  </h2>
+</div>
+
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary"></div>
+</div>
+
+<div *ngIf="!loading" class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-body p-4">
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label class="form-label">Nom de la permission <span class="text-danger">*</span></label>
+            <input type="text" class="form-control"
+                   [class.is-invalid]="f['nom'].invalid && f['nom'].touched"
+                   formControlName="nom" placeholder="READ_USERS">
+            <div class="invalid-feedback">Le nom doit contenir au moins 2 caractères.</div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" formControlName="description" rows="2"
+                      placeholder="Description de la permission..."></textarea>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="saving">
+              <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!saving" class="bi bi-check-lg me-2"></i>
+              {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+            </button>
+            <a routerLink="/permissions" class="btn btn-light">
+              <i class="bi bi-arrow-left me-2"></i>Annuler
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -65,6 +65,7 @@
           <tr>
             <th>#</th>
             <th>Action</th>
+            <th>Détails</th>
             <th>Utilisateur</th>
             <th>Email</th>
             <th>Date & Heure</th>
@@ -78,6 +79,7 @@
                 {{ h.action }}
               </span>
             </td>
+            <td class="small">{{ h.details || '—' }}</td>
             <td>{{ h.utilisateurNom || '—' }}</td>
             <td class="text-muted small">{{ h.utilisateurEmail || '—' }}</td>
             <td>

@@ -2,7 +2,8 @@ package com.app.service;
 
 import com.app.dto.JwtResponse;
 import com.app.dto.LoginRequest;
-import com.app.entity.Utilisateur;
+import com.app.dto.RegisterRequest;
+import com.app.dto.UtilisateurDTO;
 import com.app.repository.UtilisateurRepository;
 import com.app.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final UtilisateurRepository utilisateurRepository;
+    private final UtilisateurService utilisateurService;
 
     public JwtResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
@@ -33,5 +35,16 @@ public class AuthService {
             .orElse("");
 
         return new JwtResponse(token, request.getEmail(), roleName);
+    }
+
+    public UtilisateurDTO register(RegisterRequest request) {
+        UtilisateurDTO dto = new UtilisateurDTO();
+        dto.setNom(request.getNom());
+        dto.setEmail(request.getEmail());
+        dto.setMotDePasse(request.getMotDePasse());
+        dto.setRoleId(request.getRoleId());
+        dto.setActif(true);
+        // BCrypt hashing and audit logging are handled inside createUtilisateur
+        return utilisateurService.createUtilisateur(dto);
     }
 }

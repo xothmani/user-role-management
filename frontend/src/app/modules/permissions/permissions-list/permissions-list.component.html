@@ -1,0 +1,76 @@
+<div class="page-header d-flex justify-content-between align-items-center">
+  <div>
+    <h2 class="mb-1"><i class="bi bi-key me-2 text-primary"></i>Permissions</h2>
+    <p class="text-muted mb-0 small">Gestion des permissions</p>
+  </div>
+  <a routerLink="/permissions/nouveau" class="btn btn-primary">
+    <i class="bi bi-plus-circle me-2"></i>Nouvelle permission
+  </a>
+</div>
+
+<div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+  {{ error }}
+  <button type="button" class="btn-close" (click)="error = ''"></button>
+</div>
+
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span class="fw-semibold">Liste des permissions</span>
+    <span class="badge bg-primary rounded-pill">{{ permissions.length }}</span>
+  </div>
+  <div class="card-body p-0">
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <div *ngIf="!loading && permissions.length === 0" class="text-center py-5">
+      <i class="bi bi-key text-muted" style="font-size: 2.5rem;"></i>
+      <p class="text-muted mt-2">Aucune permission trouvée</p>
+      <a routerLink="/permissions/nouveau" class="btn btn-primary btn-sm">Créer une permission</a>
+    </div>
+
+    <div *ngIf="!loading && permissions.length > 0" class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let permission of permissions">
+            <td class="text-muted small">{{ permission.id }}</td>
+            <td>
+              <span class="fw-semibold">
+                <i class="bi bi-key-fill text-primary me-1"></i>{{ permission.nom }}
+              </span>
+            </td>
+            <td class="text-muted">{{ permission.description || '—' }}</td>
+            <td class="text-end">
+              <div class="d-flex gap-1 justify-content-end">
+                <a [routerLink]="['/permissions', permission.id, 'modifier']"
+                   class="btn btn-sm btn-outline-primary btn-action">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <button class="btn btn-sm btn-outline-danger btn-action" (click)="confirmDelete(permission.id!)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-confirm-dialog
+  [visible]="showConfirm"
+  title="Supprimer la permission"
+  message="Cette action est irréversible. Voulez-vous vraiment supprimer cette permission ?"
+  confirmText="Supprimer"
+  (confirmed)="onDeleteConfirmed()"
+  (cancelled)="onDeleteCancelled()"
+/>

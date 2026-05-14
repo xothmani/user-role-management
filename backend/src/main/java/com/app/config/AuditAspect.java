@@ -54,6 +54,7 @@ public class AuditAspect {
             HistoriqueAction action = HistoriqueAction.builder()
                 .utilisateur(utilisateur)
                 .action(actionDescription)
+                .details(buildDetails(methodName, className, pjp.getArgs()))
                 .date(LocalDateTime.now())
                 .build();
 
@@ -63,5 +64,30 @@ public class AuditAspect {
         }
 
         return result;
+    }
+
+    private String buildDetails(String methodName, String className, Object[] args) {
+        String entity = className.replace("Service", "");
+
+        Long entityId = null;
+        if (args != null) {
+            for (Object arg : args) {
+                if (arg instanceof Long) {
+                    entityId = (Long) arg;
+                    break;
+                }
+            }
+        }
+
+        String operation;
+        if (methodName.startsWith("create")) operation = "Création";
+        else if (methodName.startsWith("update")) operation = "Mise à jour";
+        else if (methodName.startsWith("delete")) operation = "Suppression";
+        else if (methodName.startsWith("assign")) operation = "Assignation";
+        else operation = methodName;
+
+        return entityId != null
+            ? operation + " de " + entity + " #" + entityId
+            : operation + " de " + entity;
     }
 }

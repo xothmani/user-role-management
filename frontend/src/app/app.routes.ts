@@ -57,6 +57,27 @@ export const routes: Routes = [
           )
       },
       {
+        path: 'permissions',
+        loadComponent: () =>
+          import('./modules/permissions/permissions-list/permissions-list.component').then(
+            (c) => c.PermissionsListComponent
+          )
+      },
+      {
+        path: 'permissions/nouveau',
+        loadComponent: () =>
+          import('./modules/permissions/permissions-form/permissions-form.component').then(
+            (c) => c.PermissionsFormComponent
+          )
+      },
+      {
+        path: 'permissions/:id/modifier',
+        loadComponent: () =>
+          import('./modules/permissions/permissions-form/permissions-form.component').then(
+            (c) => c.PermissionsFormComponent
+          )
+      },
+      {
         path: 'historique',
         loadComponent: () =>
           import('./modules/historique/historique-list/historique-list.component').then(

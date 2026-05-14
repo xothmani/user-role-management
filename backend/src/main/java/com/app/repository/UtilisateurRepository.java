@@ -12,6 +12,7 @@ import java.util.Optional;
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
     Optional<Utilisateur> findByEmail(String email);
     boolean existsByEmail(String email);
+    boolean existsByRoleId(Long roleId);
 
     @Query("SELECT u FROM Utilisateur u LEFT JOIN FETCH u.role WHERE u.actif = true")
     List<Utilisateur> findAllActifs();

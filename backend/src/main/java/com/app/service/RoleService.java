@@ -6,6 +6,7 @@ import com.app.entity.Permission;
 import com.app.entity.Role;
 import com.app.repository.PermissionRepository;
 import com.app.repository.RoleRepository;
+import com.app.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
+    private final UtilisateurRepository utilisateurRepository;
 
     @Transactional(readOnly = true)
     public List<RoleDTO> getAll() {
@@ -73,6 +75,11 @@ public class RoleService {
 
     @Transactional
     public void deleteRole(Long id) {
+        if (utilisateurRepository.existsByRoleId(id)) {
+            throw new IllegalStateException(
+                "Ce rôle est assigné à un ou plusieurs utilisateurs. Veuillez les réassigner avant de supprimer ce rôle."
+            );
+        }
         roleRepository.deleteById(id);
     }
 

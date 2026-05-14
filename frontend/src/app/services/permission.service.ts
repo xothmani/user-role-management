@@ -14,6 +14,10 @@ export class PermissionService {
     return this.http.get<Permission[]>(this.API);
   }
 
+  getById(id: number): Observable<Permission> {
+    return this.http.get<Permission>(`${this.API}/${id}`);
+  }
+
   create(permission: Permission): Observable<Permission> {
     return this.http.post<Permission>(this.API, permission);
   }

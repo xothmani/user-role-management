@@ -24,6 +24,9 @@ public class HistoriqueAction {
     @Column(nullable = false)
     private String action;
 
+    @Column(nullable = true)
+    private String details;
+
     @Column(nullable = false)
     private LocalDateTime date;
 }

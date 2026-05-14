@@ -1,0 +1,636 @@
+%% ============================================================
+%%  POSTER — Mini-Projet Cloud
+%%  Déploiement avec Docker, Kubernetes et GCP
+%%  Rayen Othmani — ITBS Tunisia 2026
+%%
+%%  Compiler sur Overleaf :
+%%    1. New Project → Upload → poster_cloud_rayen_othmani.tex
+%%    2. Compiler : pdfLaTeX  (ou LuaLaTeX)
+%%    3. Format   : A0 Portrait recommandé
+%% ============================================================
+
+\documentclass[final]{beamer}
+
+\usepackage[
+  orientation=portrait,
+  size=a0,
+  scale=1.18
+]{beamerposter}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, listings}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage{geometry}
+\usepackage{microtype}
+
+%% ── Palette couleurs ──────────────────────────────────────────────────────
+\definecolor{navy}{HTML}{1A2D56}
+\definecolor{blue}{HTML}{2563EB}
+\definecolor{lblue}{HTML}{EFF6FF}
+\definecolor{sky}{HTML}{BAE6FD}
+\definecolor{teal}{HTML}{0D9488}
+\definecolor{green}{HTML}{16A34A}
+\definecolor{amber}{HTML}{D97706}
+\definecolor{red}{HTML}{DC2626}
+\definecolor{codebg}{HTML}{1E293B}
+\definecolor{codefg}{HTML}{E2E8F0}
+\definecolor{gray}{HTML}{6B7280}
+\definecolor{lgray}{HTML}{F3F4F6}
+\definecolor{white}{HTML}{FFFFFF}
+
+%% ── Beamer theme reset ───────────────────────────────────────────────────
+\usetheme{default}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{}
+
+%% ── tcolorbox styles ──────────────────────────────────────────────────────
+%% Section box (titre coloré)
+\tcbset{
+  sectionbox/.style={
+    enhanced, colback=white, colframe=navy,
+    fonttitle=\bfseries\large, coltitle=white,
+    colbacktitle=navy, attach boxed title to top left,
+    boxed title style={colback=navy, sharp corners},
+    top=8pt, bottom=8pt, left=8pt, right=8pt,
+    boxrule=1.2pt, sharp corners=south,
+    before skip=14pt, after skip=6pt
+  },
+  codebox/.style={
+    enhanced, colback=codebg, colframe=navy!40,
+    fontupper=\ttfamily\small\color{codefg},
+    boxrule=0.8pt, sharp corners,
+    top=6pt, bottom=6pt, left=8pt, right=8pt,
+    before skip=6pt, after skip=6pt
+  },
+  resultbox/.style={
+    enhanced, colback=lblue, colframe=blue,
+    boxrule=1.2pt, sharp corners,
+    top=8pt, bottom=8pt, left=8pt, right=8pt,
+    before skip=8pt, after skip=6pt
+  },
+  warnbox/.style={
+    enhanced, colback=amber!10, colframe=amber,
+    boxrule=1pt, sharp corners,
+    top=6pt, bottom=6pt, left=8pt, right=8pt,
+    before skip=6pt, after skip=6pt
+  },
+  tagbox/.style={
+    enhanced, colback=blue, colframe=blue,
+    fontupper=\bfseries\small\color{white},
+    boxrule=0pt, sharp corners,
+    top=2pt, bottom=2pt, left=6pt, right=6pt,
+  }
+}
+
+%% ── Listings style ────────────────────────────────────────────────────────
+\lstset{
+  basicstyle=\ttfamily\footnotesize\color{codefg},
+  backgroundcolor=\color{codebg},
+  keywordstyle=\color{sky}\bfseries,
+  stringstyle=\color{green!70!white},
+  commentstyle=\color{gray!80}\itshape,
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  numbers=none,
+  frame=none,
+  aboveskip=0pt, belowskip=0pt,
+  xleftmargin=8pt, xrightmargin=8pt,
+  lineskip=1pt,
+}
+
+%% ── Bullet helper ─────────────────────────────────────────────────────────
+\newcommand{\bitem}[2][blue]{%
+  {\color{#1}\textbf{►}}\hspace{4pt}#2\par\vspace{3pt}%
+}
+
+%% ── Column separator ──────────────────────────────────────────────────────
+\newcommand{\colsep}{%
+  \hspace{12pt}\textcolor{navy!20}{\rule{1.2pt}{0.88\textheight}}\hspace{12pt}%
+}
+
+%% ══════════════════════════════════════════════════════════════════════════
+\begin{document}
+\begin{frame}[t]{}
+
+%% ╔══════════════════════════════════════════════════════════════════════╗
+%% ║                          EN-TÊTE                                    ║
+%% ╚══════════════════════════════════════════════════════════════════════╝
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[navy] (-2,-2) rectangle (\paperwidth+2, 4.2cm);
+  \fill[blue] (-2,-2) rectangle (\paperwidth+2, -1.4cm);
+\end{tikzpicture}
+
+\vspace{-1.6cm}
+\begin{center}
+  {\color{sky}\small\textbf{ITBS — Institut Tunisien des Grandes Écoles de Business \& Sciences
+  \quad|\quad Mini-Projet Cloud \quad|\quad 2025–2026}}\\[0.5em]
+  {\color{white}\fontsize{52}{60}\selectfont\textbf{%
+    Déploiement d'une Application Web}}\\[0.3em]
+  {\color{sky}\fontsize{38}{46}\selectfont\textbf{%
+    avec Docker, Kubernetes \& GCP}}\\[0.7em]
+  {\color{white!85!navy}\large
+    User Role Management System \quad
+    \textcolor{sky}{|}\quad
+    Spring Boot 3.2 $\cdot$ Angular 17 $\cdot$ PostgreSQL 16}\\[0.6em]
+  \begin{tikzpicture}
+    \fill[blue!60!white, rounded corners=6pt]
+      (0,0) rectangle (10cm, 1.1cm);
+    \node[white, font=\large\bfseries] at (5cm, 0.55cm)
+      {Rayen Othmani \quad\textcolor{sky}{|}\quad rayen.othmani@atlas-labs.org};
+  \end{tikzpicture}
+\end{center}
+\vspace{0.4cm}
+
+%% ── Badge tags ────────────────────────────────────────────────────────
+\begin{center}
+\begin{tcolorbox}[tagbox, width=3.5cm, nobeforeafter, box align=base]Docker\end{tcolorbox}\hspace{6pt}
+\begin{tcolorbox}[tagbox, colback=teal, colframe=teal, width=4.5cm, nobeforeafter, box align=base]Kubernetes\end{tcolorbox}\hspace{6pt}
+\begin{tcolorbox}[tagbox, colback=red, colframe=red, width=3cm, nobeforeafter, box align=base]GCP/GKE\end{tcolorbox}\hspace{6pt}
+\begin{tcolorbox}[tagbox, colback=green, colframe=green, width=3.5cm, nobeforeafter, box align=base]ArgoCD\end{tcolorbox}\hspace{6pt}
+\begin{tcolorbox}[tagbox, colback=amber, colframe=amber, width=5cm, nobeforeafter, box align=base]GitHub Actions\end{tcolorbox}\hspace{6pt}
+\begin{tcolorbox}[tagbox, colback=gray, colframe=gray, width=4.5cm, nobeforeafter, box align=base]JWT / RBAC\end{tcolorbox}
+\end{center}
+\vspace{0.3cm}
+
+\noindent\textcolor{navy!30}{\rule{\linewidth}{1.4pt}}
+\vspace{0.2cm}
+
+%% ╔══════════════════════════════════════════════════════════════════════╗
+%% ║                     CORPS — 3 COLONNES                              ║
+%% ╚══════════════════════════════════════════════════════════════════════╝
+\begin{columns}[t]
+
+%% ════════════════════════════════
+%%   COLONNE 1 — Contexte + Archi
+%% ════════════════════════════════
+\begin{column}{0.315\linewidth}
+
+%% ── Contexte ────────────────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faQuestion\quad Contexte \& Problématique}]
+Les déploiements traditionnels souffrent de trois limites majeures :
+\vspace{4pt}
+
+\bitem[red]{Portabilité : dépendances liées à la machine hôte}
+\bitem[red]{Scalabilité : provisioning manuel, lent et coûteux}
+\bitem[red]{Reproductibilité : déploiements fragiles, rollback difficile}
+
+\vspace{6pt}
+\textbf{Solution adoptée :}\\[4pt]
+\bitem{Conteneurisation Docker → images immuables et portables}
+\bitem{Kubernetes → orchestration automatique, scaling, self-healing}
+\bitem{GKE Autopilot → infrastructure managée, zéro ops nœuds}
+\end{tcolorbox}
+
+%% ── Application ─────────────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faCode\quad Application Déployée}]
+\textbf{User Role Management System} — Application web full-stack de gestion des utilisateurs, rôles et permissions avec authentification JWT.
+
+\vspace{8pt}
+\begin{center}
+\begin{tabular}{>{\columncolor{navy}\color{white}\bfseries}l >{\columncolor{lblue}}l}
+Couche & Technologie \\[2pt]
+\rowcolor{white} Frontend & Angular 17 + NGINX \\
+\rowcolor{lblue}  Backend & Spring Boot 3.2 / Java 21 \\
+\rowcolor{white} Base de données & PostgreSQL 16-Alpine \\
+\rowcolor{lblue}  Auth & JWT (jjwt 0.12.3) \\
+\rowcolor{white} Monitoring & Actuator + Prometheus \\
+\end{tabular}
+\end{center}
+
+\vspace{8pt}
+\textbf{Fonctionnalités :}\\[4pt]
+\bitem{Inscription / Connexion JWT — génération de tokens}
+\bitem{CRUD Utilisateurs, Rôles, Permissions}
+\bitem{Audit trail via Spring AOP}
+\bitem{Healthcheck \texttt{/actuator/health} pour K8s}
+\end{tcolorbox}
+
+%% ── Architecture globale ────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faSitemap\quad Architecture du Système}]
+
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+  GitHub (main/dev)
+        |
+        | git push
+        v
+  GitHub Actions CI
+  +---------------+
+  | - Tests       |
+  | - Trivy scan  |
+  | - docker build|
+  | - docker push |
+  +-------+-------+
+          |
+          v
+    Docker Hub
+    raybob2001/...
+          |
+          | GitOps sync
+          v
+       ArgoCD
+    auto-sync k8s/
+    self-heal + prune
+          |
+          v
+   GKE Autopilot
+   europe-west1
+   NS: user-role-management
+          |
+   LoadBalancer IP
+          |
+          v
+      Utilisateur
+    http://<IP>:80
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{Composants K8s dans le namespace :}\\[4pt]
+\begin{center}
+\small
+\begin{tabular}{ll>{\color{teal}}l}
+\toprule
+\textbf{Ressource} & \textbf{Nom} & \textbf{Type} \\
+\midrule
+Deployment & frontend & 2 réplicas \\
+Deployment & backend  & 2 réplicas \\
+Deployment & postgres & 1 réplica  \\
+Service    & frontend & LoadBalancer \\
+Service    & backend  & ClusterIP \\
+Service    & postgres & ClusterIP \\
+ConfigMap  & app-config & — \\
+Secret     & app-secret & Opaque \\
+PVC        & postgres-pvc & 1Gi \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{tcolorbox}
+
+\end{column}
+\colsep
+
+%% ════════════════════════════════
+%%   COLONNE 2 — Docker + K8s
+%% ════════════════════════════════
+\begin{column}{0.315\linewidth}
+
+%% ── Docker ──────────────────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faDocker\quad Conteneurisation Docker}]
+
+\textbf{Stratégie multi-stage build} : l'image de production ne contient que le runtime (pas les outils de build), ce qui réduit la taille et la surface d'attaque.
+
+\vspace{8pt}
+\textbf{Dockerfile Backend} (\texttt{backend/Dockerfile}) :
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+# Stage 1 : Build Maven
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+COPY src ./src
+RUN mvn package -DskipTests -B
+
+# Stage 2 : Runtime leger (~90 MB)
+FROM eclipse-temurin:21-jre-alpine
+RUN addgroup -S spring \
+ && adduser -S spring -G spring
+COPY --from=build /app/target/*.jar app.jar
+USER spring
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s \
+  CMD wget -qO- localhost:8080/actuator/health
+ENTRYPOINT ["java", "-jar", "app.jar"]
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{Dockerfile Frontend} (\texttt{frontend/Dockerfile}) :
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+# Stage 1 : Build Angular (prod)
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+COPY . .
+RUN npm run build -- --configuration production
+
+# Stage 2 : Serveur NGINX
+FROM nginx:alpine
+COPY --from=build \
+  /app/dist/frontend/browser \
+  /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{NGINX} joue un double rôle : serveur de fichiers Angular \textbf{ET} reverse proxy vers le backend :
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+location /api/ {
+  # Proxy vers le service K8s backend
+  proxy_pass http://backend:8080/api/;
+}
+location / {
+  # SPA routing Angular
+  try_files $uri $uri/ /index.html;
+}
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{Build \& Push :}
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+$ docker build -t raybob2001/user-role-\
+  management-backend:latest ./backend
+Successfully built a3f2b1c9d5e8
+$ docker push raybob2001/user-role-\
+  management-backend:latest
+latest: digest: sha256:a1b2c3...
+\end{lstlisting}
+\end{tcolorbox}
+
+\end{tcolorbox}
+
+%% ── Kubernetes ──────────────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faServer\quad Orchestration Kubernetes}]
+
+\textbf{Backend Deployment} — 2 réplicas avec readiness probe :
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+spec:
+  replicas: 2
+  containers:
+    - name: backend
+      image: raybob2001/...-backend:latest
+      resources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+      envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secret
+      readinessProbe:
+        httpGet:
+          path: /actuator/health
+          port: 8080
+        initialDelaySeconds: 15
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{PostgreSQL} avec stockage persistant (PVC 1Gi) :
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+volumes:
+  - name: postgres-data
+    persistentVolumeClaim:
+      claimName: postgres-pvc
+---
+kind: PersistentVolumeClaim
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{Déploiement sur Minikube (local) :}
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+$ kubectl apply -f k8s/namespace.yaml
+$ kubectl apply -f k8s/configmap.yaml
+$ kubectl apply -f k8s/secret.yaml
+$ kubectl apply -f k8s/postgres-deployment.yaml
+$ kubectl apply -f k8s/backend-deployment.yaml
+$ kubectl apply -f k8s/frontend-deployment.yaml
+
+$ kubectl get pods -n user-role-management
+NAME                    READY  STATUS    AGE
+backend-xxx-4xk2p       1/1    Running   3m
+backend-xxx-9mn8r       1/1    Running   3m
+frontend-xxx-2pq5s      1/1    Running   2m
+frontend-xxx-8rs3t      1/1    Running   2m
+postgres-xxx-1wr9k      1/1    Running   5m
+\end{lstlisting}
+\end{tcolorbox}
+
+\end{tcolorbox}
+
+\end{column}
+\colsep
+
+%% ════════════════════════════════
+%%   COLONNE 3 — GCP + Résultats
+%% ════════════════════════════════
+\begin{column}{0.315\linewidth}
+
+%% ── GCP ─────────────────────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faCloud\quad Déploiement sur GCP}]
+
+\textbf{Script automatisé} \texttt{deploy-gcp.sh} — guide le déploiement complet en 13 étapes.
+
+\vspace{8pt}
+\textbf{1. Authentification \& APIs :}
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+$ gcloud auth login
+$ gcloud config set project \
+    user-role-management-2026
+$ gcloud services enable \
+    container.googleapis.com \
+    compute.googleapis.com
+[OK] APIs enabled
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{2. Création cluster GKE Autopilot :}
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+$ gcloud container clusters create-auto \
+    user-role-cluster \
+    --region=europe-west1
+
+NAME               STATUS   NODES
+user-role-cluster  RUNNING  3
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{3. Configuration kubectl :}
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+$ gcloud container clusters get-credentials \
+    user-role-cluster \
+    --region=europe-west1
+
+kubeconfig entry generated.
+Context: gke_..._user-role-cluster
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{4. Service LoadBalancer GCP :}
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+spec:
+  type: LoadBalancer   # GCP provisionne LB
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 80
+
+$ kubectl get svc -n user-role-management
+NAME     TYPE         EXTERNAL-IP
+frontend LoadBalancer 34.78.45.123
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\textbf{5. ArgoCD GitOps :}
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+# argocd-app.yaml
+spec:
+  source:
+    repoURL: https://github.com/xothmani/\
+             user-role-management
+    path: k8s
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+\end{lstlisting}
+\end{tcolorbox}
+
+\end{tcolorbox}
+
+%% ── Résultats ───────────────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faCheckCircle\quad Résultats \& Validation}]
+
+\begin{tcolorbox}[codebox]
+\begin{lstlisting}
+$ kubectl get pods -n user-role-management
+NAME                READY  STATUS   RESTARTS
+backend-xxx-4xk2p   1/1    Running  0
+backend-xxx-9mn8r   1/1    Running  0
+frontend-xxx-2pq5s  1/1    Running  0
+frontend-xxx-8rs3t  1/1    Running  0
+postgres-xxx-1wr9k  1/1    Running  0
+
+$ curl http://34.78.45.123/api/auth/login \
+  -d '{"email":"admin@app.com",...}'
+{"token":"eyJhbGciOiJIUzI1NiJ9..."}
+\end{lstlisting}
+\end{tcolorbox}
+
+\vspace{6pt}
+\begin{tcolorbox}[resultbox]
+\begin{center}
+\begin{tabular}{lc}
+\textbf{Métrique} & \textbf{Valeur} \\
+\midrule
+Pods en état Running & 5/5 \\
+Réplicas backend actifs & 2/2 \\
+Réplicas frontend actifs & 2/2 \\
+Service LoadBalancer & IP publique \\
+Healthcheck backend & UP \\
+Base de données & UP \\
+\end{tabular}
+\end{center}
+\end{tcolorbox}
+
+\end{tcolorbox}
+
+%% ── Difficultés ─────────────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faExclamationTriangle\quad Difficultés \& Solutions}]
+
+\small
+\begin{tabular}{>{\bfseries\color{red}}p{3.8cm} >{\color{teal}}p{6.6cm}}
+\toprule
+\color{navy}\textbf{Problème} & \color{navy}\textbf{Solution} \\
+\midrule
+Frontend obsolète après rebuild
+& \texttt{docker build --no-cache} dans CI \\[4pt]
+NGINX 404 sur routes Angular
+& \texttt{try\_files \$uri /index.html} \\[4pt]
+Frontend appelle localhost:8080
+& Proxy NGINX \texttt{/api/ → backend:8080} \\[4pt]
+Backend crashe avant Postgres
+& \texttt{readinessProbe} sur \texttt{/actuator/health} \\[4pt]
+NodePort rejeté sur GKE
+& Service \texttt{type: LoadBalancer} \\[4pt]
+PVC non supprimé
+& \texttt{kubectl delete pvc postgres-pvc} \\
+\bottomrule
+\end{tabular}
+
+\end{tcolorbox}
+
+%% ── Conclusion ──────────────────────────────────────────────────────
+\begin{tcolorbox}[sectionbox, title={\faFlag\quad Conclusion \& Perspectives}]
+
+\bitem[green]{Conteneurisation complète avec Dockerfiles multi-étapes optimisés}
+\bitem[green]{Orchestration K8s : 12 manifestes YAML, namespace dédié, PVC, probes}
+\bitem[green]{Déploiement GKE Autopilot — europe-west1 — automatisé par script}
+\bitem[green]{GitOps ArgoCD : sync auto, self-heal, prune}
+\bitem[green]{CI/CD GitHub Actions : tests, Trivy, build, push Docker Hub}
+
+\vspace{6pt}
+\textbf{Perspectives :}\\
+\bitem[amber]{Ingress Controller + TLS/HTTPS (cert-manager)}
+\bitem[amber]{Horizontal Pod Autoscaler (HPA) selon charge CPU}
+\bitem[amber]{Prometheus + Grafana sur cluster (métriques Actuator)}
+\bitem[amber]{Cloud SQL (base managée) + Google Secret Manager}
+
+\end{tcolorbox}
+
+\end{column}
+
+\end{columns}
+
+%% ── Pied de page ──────────────────────────────────────────────────────────
+\vspace{0.4cm}
+\noindent\textcolor{navy!30}{\rule{\linewidth}{1.4pt}}
+\vspace{0.2cm}
+\begin{center}
+  \small\color{gray}
+  \textbf{Rayen Othmani} \quad|\quad
+  rayen.othmani@atlas-labs.org \quad|\quad
+  \textbf{ITBS Tunisia} — Licence/Master Informatique \quad|\quad
+  \textbf{2025–2026} \quad|\quad
+  \faGithub~\texttt{github.com/xothmani/user-role-management}
+\end{center}
+
+\end{frame}
+\end{document}

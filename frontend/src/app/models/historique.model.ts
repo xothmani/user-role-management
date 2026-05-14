@@ -4,5 +4,6 @@ export interface HistoriqueAction {
   utilisateurNom?: string;
   utilisateurEmail?: string;
   action: string;
+  details?: string;
   date: string;
 }

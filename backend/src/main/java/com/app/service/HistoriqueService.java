@@ -6,6 +6,8 @@ import com.app.entity.Utilisateur;
 import com.app.repository.HistoriqueActionRepository;
 import com.app.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,22 @@ public class HistoriqueService {
 
     @Transactional(readOnly = true)
     public List<HistoriqueDTO> getAll(Long utilisateurId, LocalDateTime dateDebut, LocalDateTime dateFin) {
-        return historiqueRepository.findWithFilters(utilisateurId, dateDebut, dateFin)
+        Specification<HistoriqueAction> spec = Specification.where(null);
+
+        if (utilisateurId != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.equal(root.get("utilisateur").get("id"), utilisateurId));
+        }
+        if (dateDebut != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.greaterThanOrEqualTo(root.get("date"), dateDebut));
+        }
+        if (dateFin != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.lessThanOrEqualTo(root.get("date"), dateFin));
+        }
+
+        return historiqueRepository.findAll(spec, Sort.by(Sort.Direction.DESC, "date"))
             .stream()
             .map(this::toDTO)
             .collect(Collectors.toList());
@@ -43,6 +60,7 @@ public class HistoriqueService {
         HistoriqueDTO dto = new HistoriqueDTO();
         dto.setId(h.getId());
         dto.setAction(h.getAction());
+        dto.setDetails(h.getDetails());
         dto.setDate(h.getDate());
         if (h.getUtilisateur() != null) {
             dto.setUtilisateurId(h.getUtilisateur().getId());

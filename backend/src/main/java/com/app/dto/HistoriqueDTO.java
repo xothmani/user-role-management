@@ -11,5 +11,6 @@ public class HistoriqueDTO {
     private String utilisateurNom;
     private String utilisateurEmail;
     private String action;
+    private String details;
     private LocalDateTime date;
 }
